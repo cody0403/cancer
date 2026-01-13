@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>安聯人壽保險費率計算機</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <h1>安聯人壽保險費率查詢</h1>
+        
+        <div class="card settings-card">
+            <div class="form-group">
+                <label for="product">選擇商品：</label>
+                <select id="product">
+                    <option value="FCN">珍愛馨癌症定期健康保險 (FCN)</option>
+                    <option value="TCN">安勝人生癌症定期健康保險 (TCN)</option>
+                    <option value="CR2C">新一年定期癌症健康保險附約 (CR2C)</option>
+                </select>
+            </div>
+
+            <div class="form-group" id="gender-group" style="display: none;">
+                <label for="gender">性別：</label>
+                <select id="gender">
+                    <option value="male">男性</option>
+                    <option value="female">女性</option>
+                </select>
+            </div>
+
+            <div class="form-group" id="term-group">
+                <label for="term">繳費年期：</label>
+                <select id="term">
+                    <option value="10">10年期</option>
+                    <option value="20">20年期</option>
+                </select>
+            </div>
+            
+            <div class="info-tag" id="unit-display">目前單位：元/每萬元保險金額</div>
+        </div>
+
+        <div class="card">
+            <h2>單一年度費用查詢</h2>
+            <div class="input-row">
+                <label>年齡：<input type="number" id="single-age" min="0" placeholder="輸入年齡"></label>
+                <button onclick="calculateSingle()">查詢</button>
+            </div>
+            <div class="result" id="single-result">請輸入年齡並查詢</div>
+        </div>
+
+        <div class="card">
+            <h2>年齡區間費用加總</h2>
+            <div class="input-row">
+                <label>起始年齡：<input type="number" id="start-age" min="0" placeholder="起始"></label>
+                <label>結束年齡：<input type="number" id="end-age" min="0" placeholder="結束"></label>
+                <button onclick="calculateRange()">計算總和</button>
+            </div>
+            <div class="result" id="range-result">請輸入區間並計算</div>
+        </div>
+        
+        <p class="note" id="source-note">* 數據來源：FCN_coi.pdf, TCN_coi.pdf, CR2C - 工作表1.pdf。</p>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
