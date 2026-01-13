@@ -46,7 +46,7 @@ select, input {
     border: 1px solid #ccc;
     border-radius: 4px;
     width: 60%;
-    max-width: 100%;
+    max-width: 500px;
     font-size: 16px;
 }
 
@@ -108,3 +108,4 @@ button:hover {
     width: 80px;
 
 }
+
