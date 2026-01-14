@@ -41,13 +41,15 @@ label {
     width: 90px;
 }
 
+/* 修正後的樣式：寬度設為 100% 避免文字被切掉 */
 select, input {
     padding: 8px;
     border: 1px solid #ccc;
     border-radius: 4px;
-    width: 60%;
-    max-width: 500px;
+    width: 100%;       
+    max-width: 100%;   
     font-size: 16px;
+    box-sizing: border-box;
 }
 
 button {
@@ -58,11 +60,24 @@ button {
     border-radius: 4px;
     cursor: pointer;
     font-size: 14px;
-    margin-left: 10px;
+    margin-top: 10px; /* 手機版按鈕換行時增加間距 */
 }
 
 button:hover {
     background-color: #004d73;
+}
+
+/* 針對電腦版，讓按鈕在同一行更美觀 */
+@media (min-width: 400px) {
+    button {
+        width: auto;
+        margin-top: 0;
+        margin-left: 10px;
+    }
+    select, input {
+        width: 60%;
+        max-width: 300px;
+    }
 }
 
 .result {
@@ -92,9 +107,9 @@ button:hover {
     color: #666;
     text-align: center;
     margin-top: 20px;
+    line-height: 1.5;
 }
 
-/* 針對手機版優化輸入框排列 */
 .input-row {
     display: flex;
     align-items: center;
@@ -106,6 +121,4 @@ button:hover {
 }
 .input-row input {
     width: 80px;
-
 }
-
