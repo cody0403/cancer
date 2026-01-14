@@ -17,6 +17,7 @@
                     <option value="FCN">珍愛馨癌症定期健康保險 (FCN)</option>
                     <option value="TCN">安勝人生癌症定期健康保險 (TCN)</option>
                     <option value="CR2C">新一年定期癌症健康保險附約 (CR2C)</option>
+                    <option value="NTC">樂齡長青癌症定期健康保險 (NTC)</option>
                 </select>
             </div>
 
@@ -32,6 +33,7 @@
                 <label for="term">繳費年期：</label>
                 <select id="term">
                     <option value="10">10年期</option>
+                    <option value="15" id="opt-15" style="display:none">15年期</option>
                     <option value="20">20年期</option>
                 </select>
             </div>
@@ -58,7 +60,10 @@
             <div class="result" id="range-result">請輸入區間並計算</div>
         </div>
         
-        <p class="note" id="source-note">* 數據來源：FCN_coi.pdf, TCN_coi.pdf, CR2C - 工作表1.pdf。</p>
+        <p class="note" id="source-note">
+            * 數據來源：FCN, TCN, CR2C, NTC 費率表。<br>
+            * 本工具僅供參考，實際保費以保險公司公告為準。
+        </p>
     </div>
 
     <script src="script.js"></script>
