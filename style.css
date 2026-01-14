@@ -41,7 +41,7 @@ label {
     width: 90px;
 }
 
-/* 修正後的樣式：寬度設為 100% 避免文字被切掉 */
+/* 確保選單不會被切掉 */
 select, input {
     padding: 8px;
     border: 1px solid #ccc;
@@ -60,14 +60,14 @@ button {
     border-radius: 4px;
     cursor: pointer;
     font-size: 14px;
-    margin-top: 10px; /* 手機版按鈕換行時增加間距 */
+    margin-top: 10px;
 }
 
 button:hover {
     background-color: #004d73;
 }
 
-/* 針對電腦版，讓按鈕在同一行更美觀 */
+/* 電腦版排版優化 */
 @media (min-width: 400px) {
     button {
         width: auto;
