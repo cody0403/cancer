@@ -20,16 +20,18 @@ const cr2cData = {
     female: [46.5, 40.0, 34.6, 29.7, 25.6, 21.8, 23.2, 23.2, 24.5, 25.9, 27.4, 29.2, 31.0, 32.8, 34.8, 36.7, 39.1, 41.6, 46.8, 52.6, 59.7, 67.2, 76.1, 88.0, 101.7, 117.9, 137.2, 160.1, 183.0, 209.7, 240.0, 275.2, 315.8, 355.4, 400.2, 450.5, 507.7, 572.1, 639.0, 713.8, 797.7, 891.7, 983.0, 1059.1, 1125.9, 1197.2, 1273.2, 1354.2, 1432.2, 1495.5, 1582.0, 1651.8, 1724.6, 1805.1, 1889.3, 1977.5, 2097.5, 2195.2, 2287.1, 2382.6, 2449.6, 2552.0, 2658.7, 2853.9, 3023.6, 3160.3, 3302.9, 3451.9, 3594.8, 3743.4, 3898.1, 4059.4, 4227.1, 4366.2, 4509.6, 4657.8, 5123.6, 5636.0, 6199.5, 6819.5, 7501.5, 8251.6, 9076.8, 9984.4, 10982.9, 12081.2]
 };
 
-[cite_start]// 4. NTC (分男女, 10/15/20年期, 55歲起, 單位: 10萬元) [cite: 18, 19, 20]
+// 4. NTC (分男女, 10/15/20年期, 55歲起, 單位: 10萬元) [cite: 18-20]
 // 數據陣列從 55 歲開始 (index 0 = 55歲)
 const ntcData = {
-    // 55-80歲
+    // 10年期 (55-80歲)
     term10_male: [2010, 2130, 2270, 2410, 2560, 2710, 2870, 3040, 3220, 3400, 3580, 3760, 3950, 4130, 4310, 4480, 4630, 4770, 4890, 5000, 5090, 5160, 5190, 5220, 5230, 5240],
     term10_female: [1700, 1770, 1850, 1920, 2010, 2090, 2180, 2280, 2380, 2480, 2590, 2690, 2810, 2920, 3030, 3130, 3230, 3330, 3420, 3510, 3590, 3660, 3730, 3780, 3830, 3870],
-    // 55-75歲
+    
+    // 15年期 (55-75歲)
     term15_male: [2400, 2550, 2700, 2860, 3020, 3190, 3360, 3530, 3710, 3880, 4060, 4230, 4390, 4550, 4700, 4840, 4960, 5060, 5160, 5230, 5300],
     term15_female: [1950, 2030, 2120, 2210, 2310, 2400, 2500, 2600, 2710, 2810, 2920, 3020, 3130, 3240, 3340, 3440, 3520, 3610, 3690, 3760, 3820],
-    // 55-70歲
+    
+    // 20年期 (55-70歲)
     term20_male: [2710, 2860, 3010, 3160, 3320, 3470, 3630, 3780, 3930, 4080, 4220, 4370, 4500, 4630, 4750, 4860],
     term20_female: [2130, 2220, 2310, 2400, 2500, 2590, 2690, 2780, 2880, 2970, 3070, 3160, 3250, 3340, 3430, 3510]
 };
@@ -52,35 +54,44 @@ productEl.addEventListener('change', updateFormState);
 function updateFormState() {
     const product = productEl.value;
     
-    // 1. 性別與年期欄位顯示邏輯
-    if (product === 'FCN') {
-        genderGroup.style.display = 'none';
-        termGroup.style.display = 'block';
-        opt15.style.display = 'none'; // 隱藏 15年
-        if (termSelect.value === '15') termSelect.value = '10'; // 若剛好選在15，跳回10
-        unitDisplay.textContent = '單位：元/每萬元保險金額';
-        setMaxAge(55, 0); // 0-55
-
-    } else if (product === 'TCN') {
+    // 重置所有選項的顯示狀態
+    // 關鍵修正：這裡明確控制 termGroup 的顯示/隱藏
+    if (product === 'CR2C') {
         genderGroup.style.display = 'block';
-        termGroup.style.display = 'block';
-        opt15.style.display = 'none'; // 隱藏 15年
-        if (termSelect.value === '15') termSelect.value = '10';
-        unitDisplay.textContent = '單位：元/每萬元保險金額';
-        setMaxAge(55, 0); // 0-55
-
-    } else if (product === 'CR2C') {
-        genderGroup.style.display = 'block';
-        termGroup.style.display = 'none';
+        termGroup.style.display = 'none'; // CR2C 隱藏年期
         unitDisplay.textContent = '單位：元/每10萬元保險金額';
         setMaxAge(85, 0); // 0-85
+    } else {
+        // 其他所有商品 (FCN, TCN, NTC) 都要顯示年期選單
+        termGroup.style.display = 'block'; 
 
-    } else if (product === 'NTC') {
-        genderGroup.style.display = 'block';
-        termGroup.style.display = 'block';
-        opt15.style.display = 'block'; // 顯示 15年
-        unitDisplay.textContent = '單位：元/每10萬元保險金額';
-        setMaxAge(80, 55); // 55-80
+        if (product === 'FCN') {
+            genderGroup.style.display = 'none';
+            opt15.style.display = 'none'; // FCN 無 15年
+            checkTermReset();
+            unitDisplay.textContent = '單位：元/每萬元保險金額';
+            setMaxAge(55, 0);
+
+        } else if (product === 'TCN') {
+            genderGroup.style.display = 'block';
+            opt15.style.display = 'none'; // TCN 無 15年
+            checkTermReset();
+            unitDisplay.textContent = '單位：元/每萬元保險金額';
+            setMaxAge(55, 0);
+
+        } else if (product === 'NTC') {
+            genderGroup.style.display = 'block';
+            opt15.style.display = 'block'; // NTC 開啟 15年選項
+            unitDisplay.textContent = '單位：元/每10萬元保險金額';
+            setMaxAge(80, 55); // 55-80 (預設以最廣的範圍顯示)
+        }
+    }
+}
+
+// 輔助函數：如果當前選在15年，但商品不支援，跳回10年
+function checkTermReset() {
+    if (termSelect.value === '15') {
+        termSelect.value = '10';
     }
 }
 
@@ -104,23 +115,21 @@ function getRate(age) {
     const gender = document.getElementById('gender').value;
     const term = document.getElementById('term').value;
     
-    let rate = null;
-
     if (product === 'FCN') {
         if (age < 0 || age > 55) return null;
-        rate = (term === '10') ? fcnData.term10[age] : fcnData.term20[age];
+        return (term === '10') ? fcnData.term10[age] : fcnData.term20[age];
     
     } else if (product === 'TCN') {
         if (age < 0 || age > 55) return null;
         if (term === '10') {
-            rate = (gender === 'male') ? tcnData.term10_male[age] : tcnData.term10_female[age];
+            return (gender === 'male') ? tcnData.term10_male[age] : tcnData.term10_female[age];
         } else {
-            rate = (gender === 'male') ? tcnData.term20_male[age] : tcnData.term20_female[age];
+            return (gender === 'male') ? tcnData.term20_male[age] : tcnData.term20_female[age];
         }
     
     } else if (product === 'CR2C') {
         if (age < 0 || age > 85) return null;
-        rate = (gender === 'male') ? cr2cData.male[age] : cr2cData.female[age];
+        return (gender === 'male') ? cr2cData.male[age] : cr2cData.female[age];
 
     } else if (product === 'NTC') {
         if (age < 55) return null; // NTC 最小 55歲
@@ -128,17 +137,16 @@ function getRate(age) {
         
         if (term === '10') {
             if (age > 80) return null;
-            rate = (gender === 'male') ? ntcData.term10_male[idx] : ntcData.term10_female[idx];
+            return (gender === 'male') ? ntcData.term10_male[idx] : ntcData.term10_female[idx];
         } else if (term === '15') {
             if (age > 75) return null;
-            rate = (gender === 'male') ? ntcData.term15_male[idx] : ntcData.term15_female[idx];
+            return (gender === 'male') ? ntcData.term15_male[idx] : ntcData.term15_female[idx];
         } else if (term === '20') {
             if (age > 70) return null;
-            rate = (gender === 'male') ? ntcData.term20_male[idx] : ntcData.term20_female[idx];
+            return (gender === 'male') ? ntcData.term20_male[idx] : ntcData.term20_female[idx];
         }
     }
-
-    return rate;
+    return null;
 }
 
 // 取得當前單位文字
@@ -150,11 +158,17 @@ function calculateSingle() {
     const ageInput = document.getElementById('single-age').value;
     const resultDiv = document.getElementById('single-result');
     const product = productEl.value;
+    const term = document.getElementById('term').value;
     
-    // 設定最大最小年齡邏輯
+    // 設定最大最小年齡邏輯 (顯示用)
     let minAge = 0; let maxAge = 55;
     if (product === 'CR2C') maxAge = 85;
-    if (product === 'NTC') { minAge = 55; maxAge = 80; }
+    if (product === 'NTC') { 
+        minAge = 55; 
+        if(term === '10') maxAge = 80;
+        else if(term === '15') maxAge = 75;
+        else if(term === '20') maxAge = 70;
+    }
 
     if (ageInput === '' || ageInput < minAge || ageInput > maxAge) {
         resultDiv.textContent = `請輸入有效的年齡 (${minAge}-${maxAge})`;
@@ -180,10 +194,16 @@ function calculateRange() {
     const endInput = document.getElementById('end-age').value;
     const resultDiv = document.getElementById('range-result');
     const product = productEl.value;
+    const term = document.getElementById('term').value;
 
     let minAge = 0; let maxAge = 55;
     if (product === 'CR2C') maxAge = 85;
-    if (product === 'NTC') { minAge = 55; maxAge = 80; }
+    if (product === 'NTC') { 
+        minAge = 55; 
+        if(term === '10') maxAge = 80;
+        else if(term === '15') maxAge = 75;
+        else if(term === '20') maxAge = 70;
+    }
 
     if (startInput === '' || endInput === '' || 
         startInput < minAge || startInput > maxAge || 
@@ -208,13 +228,12 @@ function calculateRange() {
         if (r !== null && r !== undefined) {
             total += r;
         } else {
-            hasError = true; // 區間內有查不到的費率
+            hasError = true;
         }
     }
     
     total = Math.round(total * 100) / 100;
-
-    let warning = hasError ? "<br><span style='font-size:0.8em; color:orange'>(部分年齡無法投保或無費率，已忽略計算)</span>" : "";
+    let warning = hasError ? "<br><span style='font-size:0.8em; color:orange'>(部分年齡無法投保，已忽略計算)</span>" : "";
     
     resultDiv.innerHTML = `${start} 歲至 ${end} 歲累計總費率： <br><span style="font-size:1.5em">${total}</span> ${getUnitText()} ${warning}`;
     resultDiv.style.color = '#d32f2f';
